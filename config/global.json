@@ -1,0 +1,5 @@
+{
+    "tmdbUrl": "https://api.themoviedb.org/3/person/",
+    "api_key": "17b92e96e838d7775b04a285c8d58658",
+    "apiToken": "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxN2I5MmU5NmU4MzhkNzc3NWIwNGEyODVjOGQ1ODY1OCIsInN1YiI6IjYyZjM1NDA3ZmVhNmUzMDA3YTUxZDgyMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.I1UGMisa4zxxH59thSwyQCdOGe4_JWfLS823y4ZCB5Y"
+  }

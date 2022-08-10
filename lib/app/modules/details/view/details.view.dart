@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tmdb/app/modules/details/controller/details.controller.dart';
+import 'package:tmdb/app/routes/routes.dart';
 import 'package:tmdb/common/constants.dart';
 
 class Details extends GetView<DetailsController>{
@@ -34,7 +35,7 @@ final double _opacity = 0.6; // from 0-1.0
                   child: Image.asset('assets/test.png', fit: BoxFit.fill,)
                   ),
                 Positioned(
-                  bottom: 0,
+                  bottom: 5,
                   child: Container(
                     color: Colors.transparent,
                     width: MediaQuery.of(context).size.width,
@@ -85,7 +86,7 @@ final double _opacity = 0.6; // from 0-1.0
                             ),
                           ),
 
-                        ClipRRect(
+                          ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: BackdropFilter(
                               filter: ImageFilter.blur(sigmaX: _sigmaX, sigmaY: _sigmaY),
@@ -121,7 +122,7 @@ final double _opacity = 0.6; // from 0-1.0
                             ),
                           ),
 
-                         ClipRRect(
+                          ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: BackdropFilter(
                               filter: ImageFilter.blur(sigmaX: _sigmaX, sigmaY: _sigmaY),
@@ -164,24 +165,44 @@ final double _opacity = 0.6; // from 0-1.0
                   )  
               ],),
             ),
+            
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Color(int.parse(controller.color.value)).withOpacity(0.5)
-                ),
-                height: 50,
-                child: Center(child: Text('This is Ronaldo and he is not the only player ', style: Get.textTheme.headline6?.copyWith(color: Constants.white)))),
+              child: Column(
+                children: [
+                  Text('This is Ronaldo and he is not the only player the only white.', style: Get.textTheme.headline6?.copyWith(color: Constants.white)),
+                  const SizedBox(height: 5,),
+                  Text('Other images', style: Get.textTheme.headline6?.copyWith(color: Constants.white) ),
+                  const SizedBox(height: 10),
+                ],
+              ),
             ), 
+            
             Container(
-              height: 50,
-              child: ListView.builder(itemBuilder: (_, index){
-                return Container(height: 20,
-                color: Colors.blue,
+              height: 210,
+              color: Color(int.parse(controller.color.value)).withOpacity(0.5),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 10,
+                itemBuilder: (_, index){
+                return GestureDetector(
+                  onTap: () => Get.toNamed(Routes.VIEW),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      height: 200,
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      // width: 200,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20)
+                      ),
+                        child: Image.asset('assets/test.png', fit: BoxFit.contain,)
+                    ),
+                  ),
                 );
               }),
-            )
+            ),
+            const SizedBox(height: 40)
 
           ],
         )
