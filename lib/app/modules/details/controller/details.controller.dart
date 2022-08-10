@@ -1,5 +1,14 @@
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
 
 class DetailsController extends GetxController{
+  final color = ''.obs;
+
+  @override
+  void onInit() {
+    var arguments = Get.arguments as Map<String, dynamic>;
+    color.value = arguments['color'];
+    super.onInit();
+  }
+
   
 }
