@@ -30,8 +30,6 @@ class DetailsController extends GetxController{
   getDetails() async {
     try{
     loading.value = true;  
-    print('ID is ${person.value.id!}');
-
     Person _person = await _personRepository.getPerson(person.value.id!);
     model.Image _image = await _personRepository.getImages(person.value.id!);
     details.value = _person;

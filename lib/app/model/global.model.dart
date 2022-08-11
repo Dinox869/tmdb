@@ -1,6 +1,4 @@
-import 'package:tmdb/app/model/parent/model.dart';
-
-class Global extends Model {
+class Global{
   
   String? tmdbUrl;
   String? apiToken;

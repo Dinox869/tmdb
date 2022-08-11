@@ -211,7 +211,9 @@ final double _opacity = 0.6; // from 0-1.0
                   itemCount: controller.image.value.profiles?.length,
                   itemBuilder: (_, index){
                   return GestureDetector(
-                    onTap: () => Get.toNamed(Routes.VIEW),
+                    onTap: () => Get.toNamed(Routes.VIEW, arguments: {
+                      'personUrl' : controller.profileUrl(index)
+                    }),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Container(
