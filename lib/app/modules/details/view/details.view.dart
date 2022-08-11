@@ -1,10 +1,11 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tmdb/app/modules/details/controller/details.controller.dart';
+import 'package:tmdb/app/modules/home/widget/load.tiles.dart';
 import 'package:tmdb/app/routes/routes.dart';
-import 'package:tmdb/common/constants.dart';
 
 class Details extends GetView<DetailsController>{
   const Details({Key? key}) : super(key: key);
@@ -20,8 +21,9 @@ final double _opacity = 0.6; // from 0-1.0
       appBar: AppBar(
         elevation: 0,
         centerTitle: false,
+        iconTheme: IconThemeData(color: controller.getFontColorForBackground()),
         backgroundColor: Color(int.parse(controller.color.value)).withOpacity(0.6),
-        title: Text('BACK', style: Get.textTheme.caption?.copyWith(color: Constants.white),),
+        title: Text('BACK', style: Get.textTheme.caption?.copyWith(color: controller.getFontColorForBackground()),),
         
       ),
       body: SingleChildScrollView(
@@ -32,7 +34,12 @@ final double _opacity = 0.6; // from 0-1.0
               width: double.infinity,
               child: Stack(children: [
                 Positioned.fill(
-                  child: Image.asset('assets/test.png', fit: BoxFit.fill,)
+                  child: CachedNetworkImage(
+                                imageUrl: controller.imageUrl(),
+                                fit: BoxFit.fill,
+                                placeholder: (context, url) => const LoadContainer(),
+                                errorWidget: (context, url, error) => const LoadContainer(),
+                            ),
                   ),
                 Positioned(
                   bottom: 5,
@@ -44,8 +51,9 @@ final double _opacity = 0.6; // from 0-1.0
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(10.0),
-                          child: Text('Mercy', style: Get.textTheme.headline1?.copyWith(color: Constants.white)),
+                          child: Text(controller.person.value.name!, style: Get.textTheme.headline1?.copyWith(color: controller.getFontColorForBackground())),
                         ),
+                        
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -66,7 +74,7 @@ final double _opacity = 0.6; // from 0-1.0
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
-                                          Text('AGE', style: Get.textTheme.caption?.copyWith(color: Constants.white), textAlign: TextAlign.start,),
+                                          Text('GENDER', style: Get.textTheme.caption?.copyWith(color: controller.getFontColorForBackground()), textAlign: TextAlign.start,),
                                         ],
                                       ),
                                     ),
@@ -76,7 +84,8 @@ final double _opacity = 0.6; // from 0-1.0
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.end,
                                         children: [
-                                          Text('12', style: Get.textTheme.caption?.copyWith(color: Constants.white, fontSize: 25), textAlign: TextAlign.end,),
+                                          Text(controller.person.value.gender == 2 ? 
+                                          'MALE' : 'FEMALE', style: Get.textTheme.caption?.copyWith(color: controller.getFontColorForBackground(), fontSize: 22), textAlign: TextAlign.end,),
                                         ],
                                       ),
                                     )
@@ -102,7 +111,7 @@ final double _opacity = 0.6; // from 0-1.0
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
-                                          Text('AGE', style: Get.textTheme.caption?.copyWith(color: Constants.white), textAlign: TextAlign.start,),
+                                          Text('POPULARITY', style: Get.textTheme.caption?.copyWith(color: controller.getFontColorForBackground()), textAlign: TextAlign.start,),
                                         ],
                                       ),
                                     ),
@@ -112,7 +121,7 @@ final double _opacity = 0.6; // from 0-1.0
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.end,
                                         children: [
-                                          Text('12', style: Get.textTheme.caption?.copyWith(color: Constants.white, fontSize: 25), textAlign: TextAlign.end,),
+                                          Flexible(child: Text(controller.person.value.popularity.toString(), style: Get.textTheme.caption?.copyWith(color: controller.getFontColorForBackground(), fontSize: 22),overflow: TextOverflow.ellipsis, textAlign: TextAlign.end,)),
                                         ],
                                       ),
                                     )
@@ -138,7 +147,7 @@ final double _opacity = 0.6; // from 0-1.0
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
-                                          Text('AGE', style: Get.textTheme.caption?.copyWith(color: Constants.white), textAlign: TextAlign.start,),
+                                          Text('KNOWN FOR', style: Get.textTheme.caption?.copyWith(color: controller.getFontColorForBackground()), textAlign: TextAlign.start,),
                                         ],
                                       ),
                                     ),
@@ -148,7 +157,12 @@ final double _opacity = 0.6; // from 0-1.0
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.end,
                                         children: [
-                                          Text('12', style: Get.textTheme.caption?.copyWith(color: Constants.white, fontSize: 25), textAlign: TextAlign.end,),
+                                          Flexible(
+                                            child: Text(controller.person.value.knownForDepartment!, style: Get.textTheme.caption?.copyWith(color: controller.getFontColorForBackground(), fontSize: 22),
+                                             textAlign: TextAlign.end,
+                                             overflow: TextOverflow.fade,
+                                             ),
+                                          ),
                                         ],
                                       ),
                                     )
@@ -166,44 +180,60 @@ final double _opacity = 0.6; // from 0-1.0
               ],),
             ),
             
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                children: [
-                  Text('This is Ronaldo and he is not the only player the only white.', style: Get.textTheme.headline6?.copyWith(color: Constants.white)),
-                  const SizedBox(height: 5,),
-                  Text('Other images', style: Get.textTheme.headline6?.copyWith(color: Constants.white) ),
-                  const SizedBox(height: 10),
-                ],
-              ),
+            Obx(
+              () => controller.loading.isFalse? Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if(controller.details.value.biography != "" )
+                    Text('BioGraphy :\n${controller.details.value.biography}', style: Get.textTheme.caption?.copyWith(color: controller.getFontColorForBackground(), fontSize: 15)),
+                    const SizedBox(height: 10,),
+                    if(controller.details.value.placeOfBirth != "" )
+                    Text('Place of Birth : ${controller.details.value.placeOfBirth}', style: Get.textTheme.caption?.copyWith(color: controller.getFontColorForBackground(), fontSize: 15)),
+                    const SizedBox(height: 5,),
+                    if(controller.details.value.birthday != "" )
+                    Text('Birthday : ${controller.details.value.birthday}', style: Get.textTheme.caption?.copyWith(color: controller.getFontColorForBackground(), fontSize: 15)),
+                    const SizedBox(height: 5,),
+                    Text('\nOther images', style: Get.textTheme.caption?.copyWith(color: controller.getFontColorForBackground()) ),
+                    const SizedBox(height: 10),
+                  ],
+                ),
+              ) : const SizedBox(),
             ), 
             
-            Container(
-              height: 210,
-              color: Color(int.parse(controller.color.value)).withOpacity(0.5),
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 10,
-                itemBuilder: (_, index){
-                return GestureDetector(
-                  onTap: () => Get.toNamed(Routes.VIEW),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      height: 200,
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      // width: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20)
+            Obx(
+              () =>controller.loading.isFalse ?  Container(
+                height: 210,
+                color: Color(int.parse(controller.color.value)).withOpacity(0.5),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.image.value.profiles?.length,
+                  itemBuilder: (_, index){
+                  return GestureDetector(
+                    onTap: () => Get.toNamed(Routes.VIEW),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        height: 200,
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        width: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20)
+                        ),
+                          child: CachedNetworkImage(
+                                  imageUrl: controller.profileUrl(index),
+                                  fit: BoxFit.fill,
+                                  placeholder: (context, url) => const LoadContainer(small: true,),
+                                  errorWidget: (context, url, error) => const LoadContainer(small: true,),
+                              ),
                       ),
-                        child: Image.asset('assets/test.png', fit: BoxFit.contain,)
                     ),
-                  ),
-                );
-              }),
+                  );
+                }),
+              ) : const SizedBox()
             ),
             const SizedBox(height: 40)
-
           ],
         )
         )

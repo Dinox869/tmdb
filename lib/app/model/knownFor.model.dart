@@ -1,7 +1,6 @@
 class KnownFor {
   bool? adult;
   String? backdropPath;
-  List<int>? genreIds;
   int? id;
   String? mediaType;
   String? originalLanguage;
@@ -15,13 +14,11 @@ class KnownFor {
   int? voteCount;
   String? firstAirDate;
   String? name;
-  List<String>? originCountry;
   String? originalName;
 
-  KnownFor(
-      {this.adult,
+  KnownFor({
+      this.adult,
       this.backdropPath,
-      this.genreIds,
       this.id,
       this.mediaType,
       this.originalLanguage,
@@ -35,13 +32,12 @@ class KnownFor {
       this.voteCount,
       this.firstAirDate,
       this.name,
-      this.originCountry,
-      this.originalName});
+      this.originalName
+      });
 
   KnownFor.fromJson(Map<String, dynamic> json) {
     adult = json['adult'];
     backdropPath = json['backdrop_path'];
-    genreIds = json['genre_ids'].cast<int>();
     id = json['id'];
     mediaType = json['media_type'];
     originalLanguage = json['original_language'];
@@ -51,34 +47,31 @@ class KnownFor {
     releaseDate = json['release_date'];
     title = json['title'];
     video = json['video'];
-    voteAverage = json['vote_average'];
+    voteAverage = double.parse(json['vote_average'].toString());
     voteCount = json['vote_count'];
     firstAirDate = json['first_air_date'];
     name = json['name'];
-    originCountry = json['origin_country'].cast<String>();
     originalName = json['original_name'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['adult'] = this.adult;
-    data['backdrop_path'] = this.backdropPath;
-    data['genre_ids'] = this.genreIds;
-    data['id'] = this.id;
-    data['media_type'] = this.mediaType;
-    data['original_language'] = this.originalLanguage;
-    data['original_title'] = this.originalTitle;
-    data['overview'] = this.overview;
-    data['poster_path'] = this.posterPath;
-    data['release_date'] = this.releaseDate;
-    data['title'] = this.title;
-    data['video'] = this.video;
-    data['vote_average'] = this.voteAverage;
-    data['vote_count'] = this.voteCount;
-    data['first_air_date'] = this.firstAirDate;
-    data['name'] = this.name;
-    data['origin_country'] = this.originCountry;
-    data['original_name'] = this.originalName;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['adult'] = adult;
+    data['backdrop_path'] = backdropPath;
+    data['id'] = id;
+    data['media_type'] = mediaType;
+    data['original_language'] = originalLanguage;
+    data['original_title'] = originalTitle;
+    data['overview'] = overview;
+    data['poster_path'] = posterPath;
+    data['release_date'] = releaseDate;
+    data['title'] = title;
+    data['video'] = video;
+    data['vote_average'] = voteAverage;
+    data['vote_count'] = voteCount;
+    data['first_air_date'] = firstAirDate;
+    data['name'] = name;
+    data['original_name'] = originalName;
     return data;
   }
 }

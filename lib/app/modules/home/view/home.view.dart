@@ -1,9 +1,11 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:tmdb/app/modules/home/controller/home.controller.dart';
+import 'package:tmdb/app/modules/home/widget/load.tiles.dart';
 import 'package:tmdb/app/routes/routes.dart';
 import 'package:tmdb/common/constants.dart';
 
@@ -27,60 +29,79 @@ final double _height = 20;
         centerTitle: false,
         title: Text('Popular People', style: Get.textTheme.headline6),
       ),
-      body: SingleChildScrollView(
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: 100,
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          primary: false,
-          itemBuilder: ((_,index) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 10),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: GestureDetector(
-                  onTap: () async{
-                    var paletteGenerator = await PaletteGenerator.fromImageProvider(
-                              Image.asset('assets/test.png').image,
-                            );
-                            Color color = paletteGenerator.dominantColor!.color;
-                            print('$color');
-                      Get.toNamed(Routes.DETAILS, arguments: {
-                        'color' : color.value.toString()
-                      });
-                  },
-                  child: Container(
-                    height: 300,
-                    width: 300,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Stack(
-                      children: [
-                        Positioned.fill(
-                          child: Image.asset('assets/test.png', fit: BoxFit.fill,),
-                              ),
-                        Positioned(
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          child:  ClipRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: _sigmaX, sigmaY: _sigmaY),
-                              child: Container(
-                                color:  Colors.black.withOpacity(_opacity),
-                                child: Center(child: Text('Helping scounts', style: Get.textTheme.headline6?.copyWith(color: Constants.white))),
-                              ),
+      body: Obx(
+        ()=> SingleChildScrollView(
+          controller: controller.scrollController,
+          child: controller.loading.isTrue ? 
+            const LoadTiles() :
+           ListView.builder(
+            shrinkWrap: true,
+            itemCount: controller.people.length + 1,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            primary: false,
+            itemBuilder: ((_,index) {    
+              return index > (controller.people.length -1 ) ?
+              controller.secondaryLoading.isFalse?  const SizedBox() : Container(
+                height: 50,
+                child:  CircularProgressIndicator(
+                  color: Constants.black,
+                ),
+              )
+               :  Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: GestureDetector(
+                    onTap: () async{
+                       var paletteGenerator = await PaletteGenerator.fromImageProvider(
+                                Image.network(controller.imageUrl(index)).image,
+                              );
+                        Color color = paletteGenerator.dominantColor!.color;
+                        Get.toNamed(Routes.DETAILS, arguments: {
+                          'color' : color.value.toString(),
+                          'person' : controller.people[index]
+                        });
+                    },
+                    child: Container(
+                      height: 300,
+                      width: 300,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: CachedNetworkImage(
+                                imageUrl: controller.imageUrl(index),
+                                fit: BoxFit.fill,
+                                placeholder: (context, url) => const LoadContainer(),
+                                errorWidget: (context, url, error) => const LoadContainer(),
                             ),
-                          ),)      
-                      ],
-                    )
+                            ),
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child:  ClipRect(
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(sigmaX: _sigmaX, sigmaY: _sigmaY),
+                                child: Container(
+                                  color:  Colors.black.withOpacity(_opacity),
+                                  child: Center(child: Text(
+                                    controller.people[index].name!.toUpperCase(),
+                                    style: Get.textTheme.headline6?.copyWith(color: Constants.white))),
+                                ),
+                              ),
+                            ),)      
+                        ],
+                      )
+                    ),
                   ),
                 ),
-              ),
-            );
-          })
-          )
+              );
+            })
+            )
+        ),
       ),
     );
   }

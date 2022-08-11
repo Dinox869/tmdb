@@ -14,5 +14,6 @@ class GlobalService extends GetxService {
   }
 
   String get baseUrl => global.value.tmdbUrl!;
+
   String get apiKey => global.value.apikey!;
 }

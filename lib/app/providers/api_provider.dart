@@ -8,9 +8,9 @@ mixin ApiClient {
   String? baseUrlDev;
 
   String getBaseUrl(String path) {
-    if (!path.endsWith('/')) {
-      path += '/';
-    }
+    // if (!path.endsWith('/')) {
+    //   path += '/';
+    // }
     if (path.startsWith('/')) {
       path = path.substring(1);
     }
@@ -22,11 +22,11 @@ mixin ApiClient {
 
   String getApiBaseUrl(String path) {
     String _apiPath = globalService.baseUrl;
-    String _apiKey = '?api_key=' + globalService.apiKey;
     if (path.startsWith('/')) {
-      return getBaseUrl(_apiPath) + path.substring(1) + _apiKey;
+      return getBaseUrl(path) + path.substring(1);
     }
-    return getBaseUrl(_apiPath) + path + _apiKey;
+    print('path is ${getBaseUrl(path)}');
+    return getBaseUrl(path);
   }
 
   Uri getApiBaseUri(String path) {
