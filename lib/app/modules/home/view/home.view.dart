@@ -21,7 +21,10 @@ class HomeView extends GetView<HomeController>{
         elevation: 0,
         backgroundColor: Constants.white,
         centerTitle: false,
-        title: Text('Popular People', style: Get.textTheme.headline6),
+        title: Text(
+            'Popular People',
+            key: const Key('appBar_Text'),
+            style: Get.textTheme.headline6),
       ),
       body: Obx(
         ()=> SingleChildScrollView(
@@ -81,11 +84,11 @@ class HomeView extends GetView<HomeController>{
             controller.loading.isTrue ? 
               const LoadTiles() :
              ListView.builder(
+              key: const Key('ListView'),
               shrinkWrap: true,
               itemCount: controller.people.length + 1,
               primary: false,
               itemBuilder: ((_,index) {    
-                print('index $index length ${controller.people.length} ');
                 return index > (controller.people.length -1 ) ?
                 controller.secondaryLoading.isFalse?  const SizedBox() : SizedBox(
                   height: 50,
@@ -98,6 +101,7 @@ class HomeView extends GetView<HomeController>{
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: GestureDetector(
+                      key: Key('tap_$index'),
                       onTap: () async{
                          if(controller.offline.isFalse) {
                           var paletteGenerator = await PaletteGenerator.

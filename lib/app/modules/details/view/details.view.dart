@@ -23,10 +23,11 @@ final double _opacity = 0.6; // from 0-1.0
         centerTitle: false,
         iconTheme: IconThemeData(color: controller.getFontColorForBackground()),
         backgroundColor: Color(int.parse(controller.color.value)).withOpacity(0.6),
-        title: Text('BACK', style: Get.textTheme.caption?.copyWith(color: controller.getFontColorForBackground()),),
+        title: Text('BACK', key: const Key('BACK'), style: Get.textTheme.caption?.copyWith(color: controller.getFontColorForBackground()),),
         
       ),
       body: SingleChildScrollView(
+        key: const Key('detailScroll'), 
         child: Column(
           children: [
             SizedBox(
@@ -211,6 +212,7 @@ final double _opacity = 0.6; // from 0-1.0
                   itemCount: controller.image.value.profiles?.length,
                   itemBuilder: (_, index){
                   return GestureDetector(
+                    key: Key('tap_$index'),
                     onTap: () => Get.toNamed(Routes.VIEW, arguments: {
                       'profile' : controller.image.value.profiles![index]
                     }),
