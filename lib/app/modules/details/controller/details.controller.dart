@@ -21,9 +21,11 @@ class DetailsController extends GetxController{
 
   @override
   void onInit() {
+    //Get passed variables
     var arguments = Get.arguments as Map<String, dynamic>;
     color.value = arguments['color'];
     person.value = arguments['person'];
+    //Fetch individual person data
     getDetails();
     super.onInit();
   }
@@ -47,6 +49,7 @@ String imageUrl () => imagePath + person.value.profilePath!;
 
 String profileUrl(int index) => imagePath + image.value.profiles![index].filePath!;
 
+//Determine the text color 
 Color getFontColorForBackground() {
   return (Color(int.parse(color.value)).computeLuminance() > 0.179)? Colors.black : Colors.white;
 } 

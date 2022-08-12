@@ -14,6 +14,7 @@ final save = false.obs;
 
   @override
   void onInit() {
+    // Fetch local data
     getProfiles();
     var arguments = Get.arguments as Map<String, dynamic>;
     profile.value = arguments['profile'];
@@ -27,6 +28,7 @@ final save = false.obs;
 
     getProfiles() async {
       images.value = await Get.find<DbHelper>().getProfileList();
+      //Check if the image exist in DB
       exist();
       }
 

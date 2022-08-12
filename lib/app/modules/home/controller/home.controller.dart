@@ -39,10 +39,14 @@ class HomeController extends GetxController {
   
   @override
   void onInit() {
+    // For internet
     initConnectivity();
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    // Fetch images from local database
     getProfiles();
+    // Listen to scrolling 
     initScrollController();
+    // Fetch images from tmdb
     getPopular();
     super.onInit();
   }
@@ -77,7 +81,7 @@ class HomeController extends GetxController {
   }
 
   saveOffLine() async {
-
+    // From local db
     List<Results> _results = await  Get.find<DbHelper>().getResultsList();
 
     for (var person in people) {
@@ -136,6 +140,7 @@ class HomeController extends GetxController {
       Get.showSnackbar(UI.errorSnackBar(message: 'No Internet Connection'));
 
     } else {
+      // With internet
       if(offline.isTrue) {
         people.clear();
         pages.value = 1;
