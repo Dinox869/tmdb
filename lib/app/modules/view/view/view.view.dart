@@ -11,6 +11,7 @@ class View extends GetView<ViewController> {
   @override
   Widget build(BuildContext context) {
    return Scaffold(
+    backgroundColor: Color(int.parse(Get.find<DetailsController>().color.value)),
     appBar: AppBar(
       iconTheme: IconThemeData(color: controller.getFontColorForBackground()),
       backgroundColor: Color(int.parse(Get.find<DetailsController>().color.value)),
@@ -20,14 +21,16 @@ class View extends GetView<ViewController> {
         icon: const Icon(Icons.save)) : const SizedBox())
       ],
     ),
-    body:  CachedNetworkImage(
-      height: controller.profile.value.height?.toDouble(),
-      width: controller.profile.value.width?.toDouble(),
-                                imageUrl: controller.profileUrl(),
-                                fit: BoxFit.fill,
-                                placeholder: (context, url) => const LoadContainer(),
-                                errorWidget: (context, url, error) => const LoadContainer(),
-                            ),
+    body:  Center(
+      child: CachedNetworkImage(
+        height: controller.profile.value.height?.toDouble(),
+        width: controller.profile.value.width?.toDouble(),
+                                  imageUrl: controller.profileUrl(),
+                                  fit: BoxFit.fill,
+                                  placeholder: (context, url) => const LoadContainer(),
+                                  errorWidget: (context, url, error) => const LoadContainer(),
+                              ),
+    ),
    );
   }
 
