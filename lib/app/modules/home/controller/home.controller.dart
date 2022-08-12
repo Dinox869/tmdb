@@ -88,7 +88,13 @@ class HomeController extends GetxController {
      }
   }
 
-  String imageUrl (int index ) => imagePath + people[index].profilePath!;
+  String imageUrl (int index ) {
+    try {
+        return imagePath + people[index].profilePath!;
+    }catch(e){
+        return '';
+    }
+  }
 
   String profileUrl (int index ) => imagePath + images[index].filePath!;
 
@@ -130,8 +136,14 @@ class HomeController extends GetxController {
       Get.showSnackbar(UI.errorSnackBar(message: 'No Internet Connection'));
 
     } else {
+      if(offline.isTrue) {
+        people.clear();
+        pages.value = 1;
+        getProfiles();
+      }
 
       offline.value = false;
+
 
     }
   }

@@ -43,8 +43,9 @@ class HomeView extends GetView<HomeController>{
                     itemCount: controller.images.length,
                     itemBuilder: (_, index){
                     return GestureDetector(
-                      onTap: () async{
-                        var paletteGenerator = await PaletteGenerator.fromImageProvider(
+                      onTap: () async {
+                        if(controller.offline.isFalse){
+                          var paletteGenerator = await PaletteGenerator.fromImageProvider(
                                   Image.network(controller.imageUrl(index)).image,
                                 );
                           Color color = paletteGenerator.dominantColor!.color;
@@ -52,6 +53,7 @@ class HomeView extends GetView<HomeController>{
                         'profile' : controller.images[index],
                         'color': color.value.toString()
                       });
+                        }
                       }
                       ,
                       child: ClipRRect(
@@ -83,6 +85,7 @@ class HomeView extends GetView<HomeController>{
               itemCount: controller.people.length + 1,
               primary: false,
               itemBuilder: ((_,index) {    
+                print('index $index length ${controller.people.length} ');
                 return index > (controller.people.length -1 ) ?
                 controller.secondaryLoading.isFalse?  const SizedBox() : SizedBox(
                   height: 50,

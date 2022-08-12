@@ -37,9 +37,9 @@ class theMovieDatabaseProvider extends GetxService with ApiClient {
       _optionsCache = dio.Options();
     } else {
       _optionsNetwork =
-          buildCacheOptions(Duration(days: 3), forceRefresh: true);
+          buildCacheOptions(const Duration(days: 3), forceRefresh: true);
       _optionsCache =
-          buildCacheOptions(Duration(minutes: 10), forceRefresh: false);
+          buildCacheOptions(const Duration(minutes: 10), forceRefresh: false);
       _httpClient.interceptors.add(
           DioCacheManager(CacheConfig(baseUrl: getApiBaseUrl(""))).interceptor);
     }
