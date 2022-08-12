@@ -50,4 +50,11 @@ class Results {
     data['profile_path'] = profilePath;
     return data;
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name' : name,
+      'profilePath': profilePath
+    };
+  }
 }

@@ -111,8 +111,7 @@ class theMovieDatabaseProvider extends GetxService with ApiClient {
       if (response.statusCode == 200) {
         return Image.fromJson(response.data);
       } else {
-        throw NetworkException()
-            .errorCode(response.statusCode!, response.data['message']);
+        throw NetworkException().errorCode(response.statusCode!, response.data['message']);
       }
     } on dio.DioError catch (e) {
       throw NetworkException().dioError(e);

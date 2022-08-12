@@ -33,4 +33,12 @@ class Profiles {
     data['width'] = width;
     return data;
   }
+
+    Map<String, dynamic> toMap() {
+    return {
+      'filePath': filePath,
+      'height': height.toString(),
+      'width': width.toString(),
+    };
+  }
 }

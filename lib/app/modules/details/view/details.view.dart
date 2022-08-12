@@ -206,13 +206,13 @@ final double _opacity = 0.6; // from 0-1.0
               () =>controller.loading.isFalse ?  Container(
                 height: 210,
                 color: Color(int.parse(controller.color.value)).withOpacity(0.5),
-                child: ListView.builder(
+                child: ListView.builder (
                   scrollDirection: Axis.horizontal,
                   itemCount: controller.image.value.profiles?.length,
                   itemBuilder: (_, index){
                   return GestureDetector(
                     onTap: () => Get.toNamed(Routes.VIEW, arguments: {
-                      'personUrl' : controller.profileUrl(index)
+                      'profile' : controller.image.value.profiles![index]
                     }),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
@@ -232,7 +232,8 @@ final double _opacity = 0.6; // from 0-1.0
                       ),
                     ),
                   );
-                }),
+                  }
+                ),
               ) : const SizedBox()
             ),
             const SizedBox(height: 40)

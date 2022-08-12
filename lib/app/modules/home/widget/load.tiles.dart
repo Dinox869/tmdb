@@ -13,7 +13,6 @@ class LoadTiles extends StatelessWidget {
         highlightColor: Constants.colorGreyHighlight!,
         child: ListView(
             shrinkWrap: true,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
             physics: const NeverScrollableScrollPhysics(),
             children: List.generate(
                 5,

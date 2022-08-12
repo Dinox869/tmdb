@@ -12,12 +12,6 @@ import 'package:tmdb/common/constants.dart';
 class HomeView extends GetView<HomeController>{
   
   const HomeView({Key? key}) : super(key: key);
-
-final double _sigmaX = 0.0; // from 0-10
-final double _sigmaY = 0.0; // from 0-10
-final double _opacity = 0.6; // from 0-1.0
-final double _width = 200;
-final double _height = 20;
   
   @override
   Widget build(BuildContext context) {
@@ -32,75 +26,128 @@ final double _height = 20;
       body: Obx(
         ()=> SingleChildScrollView(
           controller: controller.scrollController,
-          child: controller.loading.isTrue ? 
-            const LoadTiles() :
-           ListView.builder(
-            shrinkWrap: true,
-            itemCount: controller.people.length + 1,
+          child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            primary: false,
-            itemBuilder: ((_,index) {    
-              return index > (controller.people.length -1 ) ?
-              controller.secondaryLoading.isFalse?  const SizedBox() : Container(
-                height: 50,
-                child:  CircularProgressIndicator(
-                  color: Constants.black,
-                ),
-              )
-               :  Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: GestureDetector(
-                    onTap: () async{
-                       var paletteGenerator = await PaletteGenerator.fromImageProvider(
-                                Image.network(controller.imageUrl(index)).image,
-                              );
-                        Color color = paletteGenerator.dominantColor!.color;
-                        Get.toNamed(Routes.DETAILS, arguments: {
-                          'color' : color.value.toString(),
-                          'person' : controller.people[index]
-                        });
-                    },
-                    child: Container(
-                      height: 300,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Stack(
-                        children: [
-                          Positioned.fill(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+            controller.images.isNotEmpty ? 
+            Text('Saved Images', style: Get.textTheme.caption?.copyWith(fontSize: 15)) 
+            : const SizedBox(),
+            const SizedBox(height: 10,),
+            controller.images.isNotEmpty ? 
+             SizedBox(
+                  height: 210,
+                  child: ListView.builder (
+                    scrollDirection: Axis.horizontal,
+                    itemCount: controller.images.length,
+                    itemBuilder: (_, index){
+                    return GestureDetector(
+                      onTap: () async{
+                        var paletteGenerator = await PaletteGenerator.fromImageProvider(
+                                  Image.network(controller.imageUrl(index)).image,
+                                );
+                          Color color = paletteGenerator.dominantColor!.color;
+                        Get.toNamed(Routes.VIEW, arguments: {
+                        'profile' : controller.images[index],
+                        'color': color.value.toString()
+                      });
+                      }
+                      ,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          height: 200,
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          width: 150,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20)
+                          ),
                             child: CachedNetworkImage(
-                                imageUrl: controller.imageUrl(index),
-                                fit: BoxFit.fill,
-                                placeholder: (context, url) => const LoadContainer(),
-                                errorWidget: (context, url, error) => const LoadContainer(),
-                            ),
-                            ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child:  ClipRect(
-                              child: BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: _sigmaX, sigmaY: _sigmaY),
-                                child: Container(
-                                  color:  Colors.black.withOpacity(_opacity),
-                                  child: Center(child: Text(
-                                    controller.people[index].name!.toUpperCase(),
-                                    style: Get.textTheme.headline6?.copyWith(color: Constants.white))),
+                                    imageUrl: controller.profileUrl(index),
+                                    fit: BoxFit.fill,
+                                    placeholder: (context, url) => const LoadContainer(small: true,),
+                                    errorWidget: (context, url, error) => const LoadContainer(small: true,),
                                 ),
+                        ),
+                      ),
+                    );
+                    }
+                  ),
+                ): const SizedBox(),
+
+            controller.loading.isTrue ? 
+              const LoadTiles() :
+             ListView.builder(
+              shrinkWrap: true,
+              itemCount: controller.people.length + 1,
+              primary: false,
+              itemBuilder: ((_,index) {    
+                return index > (controller.people.length -1 ) ?
+                controller.secondaryLoading.isFalse?  const SizedBox() : SizedBox(
+                  height: 50,
+                  child:  CircularProgressIndicator(
+                    color: Constants.black,
+                  ),
+                )
+                 :  Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: GestureDetector(
+                      onTap: () async{
+                         if(controller.offline.isFalse) {
+                          var paletteGenerator = await PaletteGenerator.
+                          fromImageProvider(Image.network(controller.imageUrl(index)).image);
+                          Color color = paletteGenerator.dominantColor!.color;
+                          Get.toNamed(Routes.DETAILS, arguments: {
+                            'color' : color.value.toString(),
+                            'person' : controller.people[index]
+                          });
+                         }
+                      },
+                      child: Container(
+                        height: 300,
+                        width: 300,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: CachedNetworkImage(
+                                  imageUrl: controller.imageUrl(index),
+                                  fit: BoxFit.fill,
+                                  placeholder: (context, url) => const LoadContainer(),
+                                  errorWidget: (context, url, error) => const LoadContainer(),
                               ),
-                            ),)      
-                        ],
-                      )
+                              ),
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child:  ClipRect(
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(sigmaX: controller.sigmaX, sigmaY: controller.sigmaY),
+                                  child: Container(
+                                    color:  Colors.black.withOpacity(controller.opacity),
+                                    child: Center(child: Text(
+                                      controller.people[index].name!.toUpperCase(),
+                                      style: Get.textTheme.headline6?.copyWith(color: Constants.white))),
+                                  ),
+                                ),
+                              ),)      
+                          ],
+                        )
+                      ),
                     ),
                   ),
-                ),
-              );
-            })
-            )
+                );
+              })
+              )
+              ],
+            ),
+          )
         ),
       ),
     );

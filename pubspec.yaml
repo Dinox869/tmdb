@@ -40,6 +40,13 @@ dependencies:
   shimmer: ^2.0.0
   #CACHE IMAGES
   cached_network_image: ^3.2.0
+  #DATABASE
+  sqflite: ^2.0.2+1
+  #PATH
+  path: ^1.8.0
+  #INTERNET
+  connectivity_plus: ^2.3.6+1
+
 
 
 dev_dependencies:

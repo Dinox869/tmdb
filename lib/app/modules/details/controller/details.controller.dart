@@ -4,6 +4,7 @@ import 'package:tmdb/app/model/image.model.dart' as model;
 import 'package:tmdb/app/model/person.model.dart';
 import 'package:tmdb/app/model/results.model.dart';
 import 'package:tmdb/app/repository/person.repository.dart';
+import 'package:tmdb/common/ui.dart';
 
 class DetailsController extends GetxController{
   final color = ''.obs;
@@ -37,17 +38,16 @@ class DetailsController extends GetxController{
     loading.value = false;
     }catch(e)
     {
-      print('ERROR ==> $e');
+      Get.showSnackbar(UI.errorSnackBar(message: '$e'));
     }
     
   }
 
 String imageUrl () => imagePath + person.value.profilePath!;
 
-String profileUrl( int index) => imagePath + image.value.profiles![index].filePath!;
+String profileUrl(int index) => imagePath + image.value.profiles![index].filePath!;
 
 Color getFontColorForBackground() {
   return (Color(int.parse(color.value)).computeLuminance() > 0.179)? Colors.black : Colors.white;
-}
-  
+} 
 }

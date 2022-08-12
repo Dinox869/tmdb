@@ -15,15 +15,15 @@ class View extends GetView<ViewController> {
       iconTheme: IconThemeData(color: controller.getFontColorForBackground()),
       backgroundColor: Color(int.parse(Get.find<DetailsController>().color.value)),
       actions: [
-        IconButton(onPressed: (){
-        },
-        icon: const Icon(Icons.save))
+       Obx(()=>  controller.save.isTrue ?IconButton(
+          onPressed: () => controller.addProfile(),
+        icon: const Icon(Icons.save)) : const SizedBox())
       ],
     ),
     body:  CachedNetworkImage(
-      height: MediaQuery.of(context).size.height,
-      width: double.infinity,
-                                imageUrl: controller.personUrl.value,
+      height: controller.profile.value.height?.toDouble(),
+      width: controller.profile.value.width?.toDouble(),
+                                imageUrl: controller.profileUrl(),
                                 fit: BoxFit.fill,
                                 placeholder: (context, url) => const LoadContainer(),
                                 errorWidget: (context, url, error) => const LoadContainer(),

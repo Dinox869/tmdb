@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
+import 'package:tmdb/common/ui.dart';
 
 class NetworkException {
   errorCode(int code, String responseMessage) async{
@@ -51,6 +53,7 @@ class NetworkException {
         return responseMessage;
       }
     }
+    Get.showSnackbar(UI.errorSnackBar(message: message));
     return message;
   }
 
@@ -86,7 +89,7 @@ class NetworkException {
       default:
         message = 'Request can\'t be processed at the moment.';
     }
-
+    Get.showSnackbar(UI.errorSnackBar(message: message));
     return message;
   }
 }
