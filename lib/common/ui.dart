@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class UI {
+
+  // Custom for snackBar
     static GetSnackBar errorSnackBar({String title = 'Note', String? message}) {
     Get.log("[$title] $message", isError: true);
     return GetSnackBar(

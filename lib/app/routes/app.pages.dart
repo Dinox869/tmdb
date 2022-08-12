@@ -10,6 +10,7 @@ import 'package:tmdb/app/routes/routes.dart';
 class AppPages {
   static const INITAL = '/home';
 
+// Routes to modules
   static final routes = [
     GetPage(
         name: Routes.HOME,

@@ -18,6 +18,7 @@ class theMovieDatabaseProvider extends GetxService with ApiClient {
   late dio.Options _optionsNetwork;
   late dio.Options _optionsCache;
 
+//Dio setup
   theMovieDatabaseProvider() {
     baseUrl = globalService.baseUrl;
     _httpClient = new dio.Dio();
@@ -46,6 +47,7 @@ class theMovieDatabaseProvider extends GetxService with ApiClient {
     return this;
   }
 
+//Fetch all popular people
   Future<pop.Response> getAll(int page) async{
      var _queryParameters = {
       'api_key': globalService.apiKey,
@@ -71,6 +73,7 @@ class theMovieDatabaseProvider extends GetxService with ApiClient {
     }
   }
 
+//Fetch person details
   Future<Person> getPerson(int id) async{
     var _queryParameters = {
           'api_key': globalService.apiKey,
@@ -95,6 +98,7 @@ class theMovieDatabaseProvider extends GetxService with ApiClient {
     }
   }
 
+//Fetch persons images
   Future<Image> getImages(int id) async{
     var _queryParameters = {
           'api_key': globalService.apiKey,

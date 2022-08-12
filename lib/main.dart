@@ -8,6 +8,7 @@ import 'package:tmdb/common/theme.dart' as tm;
 import 'app/routes/app.pages.dart';
 
  initService () async{
+  //Initialize Get
   Get.lazyPut(()=>tm.Theme());
   Get.lazyPut(() => DbHelper());
   await Get.putAsync(() => GlobalService().init());

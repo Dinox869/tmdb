@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:tmdb/common/ui.dart';
 
+// Error message display on SnackBar
 class NetworkException {
   errorCode(int code, String responseMessage) async{
     String? message = '';

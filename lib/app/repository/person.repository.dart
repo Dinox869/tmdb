@@ -11,14 +11,17 @@ late theMovieDatabaseProvider _theMovieDatabaseProvider;
     _theMovieDatabaseProvider = Get.find<theMovieDatabaseProvider>();
   }
   
+  //Fetch popular people
   Future<pop.Response> getAll(int page) {
     return _theMovieDatabaseProvider.getAll(page);
   }
 
+  //Fetch person details
   Future<Person> getPerson(int id) {
     return _theMovieDatabaseProvider.getPerson(id);
   }
 
+  //Fetch person images
   Future<Image> getImages(int id) {
     return _theMovieDatabaseProvider.getImages(id);
   }

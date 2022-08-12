@@ -4,11 +4,12 @@ import 'package:sqflite/sqflite.dart';
 import 'package:tmdb/app/model/profile.model.dart';
 import 'package:tmdb/app/model/results.model.dart';
 
+//Local Database
 class DbHelper extends GetxService{
   late Database _database;
 
+  // Open database or create
   Future openDb() async {
-
     _database = await openDatabase(
       join(await getDatabasesPath(), "images.db"),
       version: 1,
@@ -24,11 +25,13 @@ class DbHelper extends GetxService{
       return _database;
   }
 
+//Insert images from views
   Future insertModel(Profiles profiles) async {
     await openDb();
     return await _database.insert('images', profiles.toMap());
   }
 
+//Fetch all images from localDB
   Future<List<Profiles>> getProfileList() async {
     await openDb();
 
@@ -43,11 +46,13 @@ class DbHelper extends GetxService{
     });
   } 
 
+// Insert home Page details
   Future insertResults(Results results) async {
     await openDb();
     return await _database.insert('popular', results.toMap());
   }
 
+//Fetch all HomePage details
     Future<List<Results>> getResultsList() async {
     await openDb();
 
